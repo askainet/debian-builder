@@ -1,3 +1,0 @@
-require "buildtasks"
-
-BuildTasks::FPMCookery.define

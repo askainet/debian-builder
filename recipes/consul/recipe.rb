@@ -10,7 +10,7 @@ class Consul < FPM::Cookery::Recipe
   section   'database'
   conflicts 'consul'
 
-  post_install 'files/postinst'
+  post_install 'postinst'
 
   def build
   end
@@ -18,9 +18,9 @@ class Consul < FPM::Cookery::Recipe
   def install
     bin.install 'consul'
 
-    (etc/'systemd/system').install_p(workdir/'files/consul.service', 'consul.service')
-    (etc/'default').install_p(workdir/'files/consul.default', 'consul')
-    (etc/'consul.d').mkpath
-    (etc/'consul.d').install_p(workdir/'files/consul.d/00.base.json', '00.base.json')
+    etc('consul.d').mkdir
+    etc('systemd/system').install workdir('consul.service')
+    etc('consul.d').install workdir('00.base.json')
+    etc('default').install workdir('consul.default') => 'consul'
   end
 end

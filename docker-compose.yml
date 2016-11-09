@@ -1,7 +1,0 @@
-consul:
-    build: .
-    command: rake build publish PUBLISH_DIR=/pkg
-    volumes:
-        - ./recipes/consul:/data
-        - pkg:/pkg
-    working_dir: /data
