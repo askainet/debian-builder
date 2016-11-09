@@ -1,0 +1,6 @@
+Gemfile
+Gemfile.lock
+cache/
+pkg/
+tmp-build/
+tmp-dest/
