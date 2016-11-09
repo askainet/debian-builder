@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if deb-systemd-helper --quiet was-enabled consul.service; then
+        # Update the statefile to add new symlinks (if any), which need to be
+        # cleaned up on purge. Also remove old symlinks.
+        deb-systemd-helper update-state consul.service >/dev/null || true
+else
+        # Enables the unit on first installation, creates new
+        # symlinks on upgrades if the unit file has changed.
+        deb-systemd-helper enable consul.service >/dev/null || true
+fi
+
+systemctl daemon-reload || true

@@ -7,8 +7,10 @@ class Consul < FPM::Cookery::Recipe
   source   "https://releases.hashicorp.com/consul/#{version}/consul_#{version}_linux_amd64.zip"
   sha256   'b350591af10d7d23514ebaa0565638539900cdb3aaa048f077217c4c46653dd8'
 
-  section      'database'
-  conflicts    'consul'
+  section   'database'
+  conflicts 'consul'
+
+  post_install 'files/postinst'
 
   def build
   end
@@ -16,8 +18,9 @@ class Consul < FPM::Cookery::Recipe
   def install
     bin.install 'consul'
 
-    etc('init.d').install_p workdir('consul.init'), 'consul'
-    (etc/'init.d').install_p(workdir/'consul.init', 'consul')
+    (etc/'systemd/system').install_p(workdir/'files/consul.service', 'consul.service')
+    (etc/'default').install_p(workdir/'files/consul.default', 'consul')
     (etc/'consul.d').mkpath
+    (etc/'consul.d').install_p(workdir/'files/consul.d/00.base.json', '00.base.json')
   end
 end
